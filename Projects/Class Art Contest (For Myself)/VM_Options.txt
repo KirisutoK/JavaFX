@@ -1,0 +1,8 @@
+Credits to BroCode and ClaudeAI for helping me learn MediaPlayer, and Effects.
+Credits to Riley for the Buttons.
+
+Audio:
+https://youtu.be/CM6qCGP9t6k
+
+VM Options:
+--module-path "C:\Users\kiris\Desktop\General\Production\IntelliJ IDEA\JavaFX SDK\openjfx-26_windows-x64_bin-sdk\javafx-sdk-26\lib" --add-modules javafx.controls,javafx.fxml,javafx.media --add-opens javafx.graphics/com.sun.glass.utils=ALL-UNNAMED --add-opens javafx.graphics/com.sun.glass.ui=ALL-UNNAMED --enable-native-access=javafx.graphics,javafx.media

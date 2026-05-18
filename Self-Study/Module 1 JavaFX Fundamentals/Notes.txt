@@ -1,0 +1,281 @@
+JavaFX is a modern framework for building desktop GUI applications in Java
+(Think: The successor to Swing - makes creating windows, buttons, and interactive apps easier)
+
+What is JavaFX?
+
+• JavaFX is a set of graphics and media packages for creating rich desktop applications
+    → It provides pre-built UI components (buttons, text fields, labels, etc.)
+    → It uses a scene graph structure (like a tree of visual elements)
+    → It separates design (FXML) from logic (Java code)
+    → Modern look and feel with CSS styling support
+
+Key terminology:
+    • Stage: The main window (container for everything)
+    • Scene: The content inside a Stage (what you actually see)
+    • Node: Any visual element (buttons, labels, shapes, etc.)
+    • Scene Graph: A tree structure of all Nodes in your application
+    • Layout: A container that arranges other Nodes (VBox, HBox, BorderPane, etc.)
+
+Common uses:
+→ Desktop applications with graphical interfaces
+→ Data visualization and charting
+→ Media playback applications
+→ Interactive forms and dashboards
+→ Games and simulations
+
+Important Syntax that I have learned:
+
+    extends Application                     → Your main class must extend this
+    public void start(Stage primaryStage)   → The entry point for JavaFX (like main for GUI)
+    launch(args);                           → Starts the JavaFX application (called from main)
+    new Scene(root, width, height)          → Creates a new Scene with content and dimensions
+    primaryStage.setScene(scene)            → Puts the Scene into the Stage
+    primaryStage.show()                     → Displays the window
+    primaryStage.setTitle("Title")          → Sets the window title
+
+=====================[BASIC STRUCTURE]=====================
+
+Every JavaFX application follows this pattern:
+
+    import javafx.application.Application;
+    import javafx.stage.Stage;
+    import javafx.scene.Scene;
+    import javafx.scene.layout.*;
+    import javafx.scene.control.*;
+
+    public class MyApp extends Application {
+        
+        @Override
+        public void start(Stage primaryStage) {
+            // 1. Create your content (root node)
+            // 2. Create a Scene with that content
+            // 3. Put Scene in Stage
+            // 4. Show the Stage
+        }
+        
+        public static void main(String[] args) {
+            launch(args);  // Starts JavaFX
+        }
+    }
+
+The Three Essential Components:
+
+    1. Stage (The Window)
+       - The top-level container
+       - Can have title, size, icons
+       - Can be maximized, minimized, closed
+       
+    2. Scene (The Content Container)
+       - Holds all your UI elements
+       - One Scene per Stage at a time
+       - Can switch Scenes to change what's displayed
+       
+    3. Node (The Visual Elements)
+       - Buttons, labels, text fields, shapes, etc.
+       - Organized in a tree structure (scene graph)
+       - Root node holds everything else
+
+=====================[COMMON LAYOUTS]=====================
+
+Layouts organize Nodes automatically:
+
+    • VBox              → Stacks children vertically (top to bottom)
+    • HBox              → Arranges children horizontally (left to right)
+    • BorderPane        → Divides into 5 regions (Top, Bottom, Left, Right, Center)
+    • StackPane         → Stacks children on top of each other (z-axis)
+    • GridPane          → Grid layout with rows and columns
+    • FlowPane          → Wraps children like text (left to right, then down)
+
+Layout Syntax:
+
+    VBox vbox = new VBox();                    // Create vertical box
+    vbox.getChildren().add(new Button("Hi"));  // Add a button
+    vbox.setSpacing(10);                       // 10px between children
+    vbox.setPadding(new Insets(20));           // 20px padding around edges
+
+=====================[COMMON CONTROLS]=====================
+
+Controls are interactive UI elements:
+
+    • Label             → Displays text (non-editable)
+    • Button            → Clickable button
+    • TextField         → Single-line text input
+    • TextArea          → Multi-line text input
+    • CheckBox          → Checkbox (on/off)
+    • RadioButton       → Radio button (one choice from group)
+    • ComboBox          → Dropdown menu
+    • ListView          → Scrollable list of items
+    • Slider            → Draggable slider for numeric input
+
+Control Syntax:
+
+    Button btn = new Button("Click Me");       // Create button
+    btn.setOnAction(e -> handleClick());       // Set what happens on click
+    
+    TextField tf = new TextField();            // Create text field
+    tf.setPromptText("Enter name");            // Placeholder text
+    String input = tf.getText();               // Get the text
+
+=====================[EVENT HANDLING]=====================
+
+Events respond to user actions:
+
+    Button btn = new Button("Submit");
+    
+    // Lambda expression (most common)
+    btn.setOnAction(e -> {
+        System.out.println("Button clicked!");
+    });
+    
+    // Or implement EventHandler
+    btn.setOnAction(new EventHandler<ActionEvent>() {
+        public void handle(ActionEvent e) {
+            System.out.println("Button clicked!");
+        }
+    });
+
+Common Event Methods:
+
+    setOnAction()          → Button clicks, Enter key in TextField
+    setOnMouseClicked()    → Mouse click events
+    setOnKeyPressed()      → Keyboard events
+    setOnMouseEntered()    → Mouse hover events
+
+=====================[PROPERTIES AND BINDING]=====================
+
+JavaFX uses observable properties that can be bound:
+
+    TextField nameField = new TextField();
+    Label nameLabel = new Label();
+    
+    // Bind label text to text field (updates automatically)
+    nameLabel.textProperty().bind(nameField.textProperty());
+
+Common Properties:
+
+    textProperty()         → For Labels, Buttons, TextFields
+    visibleProperty()      → Show/hide controls
+    disableProperty()      → Enable/disable controls
+
+=====================[STYLING WITH CSS]=====================
+
+JavaFX supports CSS for styling:
+
+    // In Java code
+    button.setStyle("-fx-background-color: blue; -fx-text-fill: white;");
+    
+    // Or external CSS file
+    scene.getStylesheets().add("styles.css");
+
+Common CSS Properties:
+
+    -fx-background-color   → Background color
+    -fx-text-fill          → Text color
+    -fx-font-size          → Font size
+    -fx-padding            → Padding
+    -fx-border-color       → Border color
+
+=====================[IMPORTANT CONCEPTS]=====================
+
+Scene Graph Hierarchy:
+    Stage
+      └── Scene
+            └── Root Node (Layout)
+                  ├── Child Node 1
+                  ├── Child Node 2
+                  └── Child Node 3
+
+Application Lifecycle:
+    1. main() calls launch()
+    2. JavaFX creates Application instance
+    3. init() is called (optional setup)
+    4. start(Stage) is called (build your UI here)
+    5. Application runs until all windows close
+    6. stop() is called (optional cleanup)
+
+Key Rules:
+
+- Your main class MUST extend Application
+- You MUST override start(Stage primaryStage)
+- Call launch(args) from main() to start JavaFX
+- A Stage can only show one Scene at a time (but you can switch Scenes)
+- Always add Nodes to a layout/container before adding to Scene
+- The start() method is the JavaFX entry point, not main()
+- All JavaFX UI updates must happen on the JavaFX Application Thread
+- You cannot create Stage or Scene before launch() is called
+
+Common Mistakes:
+
+- Forgetting to call primaryStage.show() → window won't appear
+- Not extending Application → compile error
+- Trying to create Stage in main() → IllegalStateException
+- Forgetting to add root to Scene → NullPointerException
+- Not importing JavaFX libraries → "cannot find symbol" errors
+
+=====================[MINIMAL WORKING EXAMPLE]=====================
+
+import javafx.application.Application;
+import javafx.stage.Stage;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.StackPane;
+
+public class HelloJavaFX extends Application {
+    
+    @Override
+    public void start(Stage primaryStage) {
+        // Create a button
+        Button btn = new Button("Click Me!");
+        btn.setOnAction(e -> System.out.println("Hello JavaFX!"));
+        
+        // Create layout and add button
+        StackPane root = new StackPane();
+        root.getChildren().add(btn);
+        
+        // Create scene with layout
+        Scene scene = new Scene(root, 300, 200);
+        
+        // Setup and show stage
+        primaryStage.setTitle("My First JavaFX App");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+    
+    public static void main(String[] args) {
+        launch(args);
+    }
+}
+
+=====================[QUICK REFERENCE SUMMARY]=====================
+
+Structure:
+    extends Application        → Make your class a JavaFX app
+    start(Stage primaryStage)  → Override this (main entry for GUI)
+    launch(args)               → Start the application (in main)
+
+Components:
+    Stage                      → The window
+    Scene                      → The content container
+    Node                       → Any visual element
+    Layout                     → Container that arranges Nodes
+
+Common Layouts:
+    VBox                       → Vertical stack
+    HBox                       → Horizontal row
+    BorderPane                 → 5 regions layout
+    StackPane                  → Overlapping layers
+
+Common Controls:
+    Button, Label, TextField, TextArea, CheckBox, RadioButton
+
+Events:
+    setOnAction(e -> {...})    → Handle button clicks
+    setOnMouseClicked()        → Handle mouse events
+    setOnKeyPressed()          → Handle keyboard events
+
+Remember:
+    • Stage → Scene → Root Node → Children Nodes
+    • Always call .show() on your Stage
+    • Use layouts to organize your UI
+    • Lambda expressions make event handling clean
+    • CSS can style your components

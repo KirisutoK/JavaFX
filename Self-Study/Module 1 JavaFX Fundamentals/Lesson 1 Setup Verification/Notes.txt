@@ -1,0 +1,7 @@
+We need Application import.
+
+We also need to extend Application
+
+we need to use launch(args); in order to show the screen
+
+we need to implement the abstract class start(stage st) throws exception

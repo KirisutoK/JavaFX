@@ -1,0 +1,80 @@
+======================================[ StackPane ]======================================
+
+
+StackPane is a layout container that stacks all its children on top of each other in the center
+(Think: A stack of pancakes - everything piles up in the middle)
+
+What is StackPane?
+
+• StackPane is a JavaFX layout container that positions all children in the center, overlapping each other
+    → All components are centered by default
+    → Components overlap each other like layers
+    → The last child added appears on top
+    → Part of javafx.scene.layout package
+
+Key terminology:
+    • Layout Container: A component that holds and positions other components
+    • Children: The components (Labels, Buttons, etc.) added to the StackPane
+    • Z-order: The stacking order - last added is on top
+
+Common uses:
+→ Centering a single component
+→ Creating layered UI (background image with text overlay)
+→ Simple layouts with 1-2 components
+→ Game scenes (background layer, character layer, UI layer)
+
+Important Syntax that I have learned:
+
+    StackPane root = new StackPane()                → Creates a new StackPane
+    root.getChildren().add(component)               → Adds one child component
+    root.getChildren().addAll(comp1, comp2, comp3)  → Adds multiple children at once
+    root.setAlignment(Pos.TOP_LEFT)                 → Changes alignment (default is CENTER)
+    root.setPadding(new Insets(10))                 → Adds spacing around edges
+
+Key rules:
+- All children are centered by default
+- Components will overlap (not ideal for multiple labels/buttons)
+- Last child added is displayed on top
+- Better layouts for lists: VBox (vertical), HBox (horizontal), GridPane (table)
+- StackPane is best for 1-2 components or intentional layering
+
+======================================[ Label ]======================================
+
+Label is a UI control that displays non-editable text to the user
+(Think: A text sign or information display - you can read it but not type in it)
+
+What is Label?
+
+• Label is a JavaFX control for displaying text or images
+    → Shows static text that users can see but not edit
+    → Can display text, graphics, or both
+    → Part of javafx.scene.control package
+    → One of the most basic and commonly used UI components
+
+Key terminology:
+    • Control: An interactive UI component (Label, Button, TextField, etc.)
+    • Text Property: The actual text content displayed
+    • Graphic: An optional image or icon displayed with the text
+
+Common uses:
+→ Displaying static information (titles, descriptions, instructions)
+→ Form field labels ("Name:", "Email:", "Password:")
+→ Status messages ("File saved successfully")
+→ Showing data values ("Score: 95", "Temperature: 72°F")
+
+Important Syntax that I have learned:
+
+    Label label = new Label()                    → Creates empty label
+    Label label = new Label("text")              → Creates label with text
+    label.setText("new text")                    → Changes the displayed text
+    label.getText()                              → Gets the current text
+    label.setFont(Font.font("Arial", 20))        → Changes font and size
+    label.setTextFill(Color.BLUE)                → Changes text color
+    label.setStyle("-fx-font-size: 16px;")       → Applies CSS styling
+
+Key rules:
+- Labels are for display only (users cannot edit them)
+- Text can be changed programmatically with setText()
+- Labels can be styled with CSS
+- For user input, use TextField or TextArea instead
+- Labels are lightweight and efficient for displaying information

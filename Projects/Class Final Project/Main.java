@@ -1,5 +1,11 @@
 // Creation Date: April 30, 2026. at 11:53 AM
-// Last Modified: May 17, 2026. at 10:40 PM
+// Last Modified: May 18, 2026. at  1:52 AM
+
+/*
+THE MEDIAS FOR THIS FOLDER IS NOT PUBLISHED IN GITHUB DUE TO MEMORY LIMITATIONS.
+THE MEDIA (WHICH U NEED TO DOWNLOAD) WILL BE ON A GOOGLE DRIVE LINK.
+MEDIA LINK:
+*/
 
 import javafx.animation.*;
 import javafx.application.Application;
@@ -26,7 +32,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration; // FOR TIMERS
 
-
 public class Main extends Application {
     private static Stage stage;
     // +[LAYOUTS]+  <========= SO THAT IT CAN BE ACCESSED BY OTHER METHODS
@@ -34,19 +39,30 @@ public class Main extends Application {
     private static StackPane GameStackPane = new StackPane(); // STACKPANE MAKES THE OBJECTS OR VISUALS TO BE IN THE CENTER (IN ORDER)
 
     // +[SCENE]+  <========= SO THAT IT CAN BE ACCESSED BY OTHER METHODS
-    Scene IntroductionScene = new Scene(IntroductionStackPane, Color.BLACK);
-    Scene GameScene = new Scene(GameStackPane, Color.BLACK);
+    private static Scene IntroductionScene = new Scene(IntroductionStackPane, Color.BLACK);
+    private static Scene GameScene = new Scene(GameStackPane, Color.BLACK);
 
     // +[AUDIO]+
     private static AudioClip clickAudio = new AudioClip(Main.class.getResource("Medias/Audios/Click.mp3").toExternalForm()); // ... <============== CREDITS TO PROFESSOR PAIGE FOR THE AUDIOCLIP & CLAUDE FOR DEBUGGING;
     private static AudioClip hoverAudio = new AudioClip(Main.class.getResource("Medias/Audios/Hover.mp3").toExternalForm()); // ... <============== CREDITS TO PROFESSOR PAIGE FOR THE AUDIOCLIP & CLAUDE FOR DEBUGGING;
 
     // +[IMAGES]+
-    // . Forward01
+    // . MainCharacter
     private static Image ForwardGirlImage01 = new Image("Medias/Images/MainCharacter/Forward01.png"); // WalkingForward01 Image
     private static Image BackwardGirlImage01 = new Image("Medias/Images/MainCharacter/Backward01.png"); // WalkingBackward01 Image
     private static ImageView GirlImageView = new ImageView(ForwardGirlImage01); // the default is ForwardGirlImage01 (This object is so that we can view the image)
 
+    // +[VIDEOS]+
+    // . GameBackground
+    private static String GameBackgroundNormalFilePath = Main.class.getResource("Medias/Videos/GameBackground.mp4").toExternalForm(); // FIRST TO PLAY AS THE BACKGROUND WHEN PLAYING THE GAME
+    private static String GameBackgroundReverseFilePath = Main.class.getResource("Medias/Videos/GameBackgroundReverse.mp4").toExternalForm();
+
+    private static Media GameBackgroundMedia = new Media(GameBackgroundNormalFilePath); // Makes the File Path into a Media Object
+    private static MediaPlayer GameBackgroundMediaPlayer = new MediaPlayer(GameBackgroundMedia); // Makes MediaPlayer for Media (ENABLING TO GIVE FUNCTIONALITY)
+    private static MediaView GameBackgroundMediaView = new MediaView(GameBackgroundMediaPlayer); // Makes the MediaPlayer visible
+    private static Duration LastGameBackgroundVideoPosition = Duration.ZERO; // In order for the video to be able to go back to where it actually stopped before
+    private static Duration TotalGameBackgroundVideoTime = GameBackgroundMediaPlayer.getTotalDuration();
+    
     // +[VARIABLES]+
     private static boolean MovingForward;
     private static boolean MovingBackward;
@@ -322,6 +338,12 @@ public class Main extends Application {
         HBox GameOptionsHBox = new HBox(); // a Horizontal Layout
 
         // ===== [NODES] ==== \\
+        // +[GAME BACKGROUND]+
+        GameBackgroundMediaView.setFitWidth(1100);
+        GameBackgroundMediaView.setFitHeight(800);
+        GameBackgroundMediaView.setPreserveRatio(false);
+        GameBackgroundMediaPlayer.play();
+
         // +[BUTTON STYLES]+
         String onButton = "-fx-border-width: 2px;" + //... <============== CREDITS TO COPILOT FOR THE SYNTAX
                 "-fx-border-radius: 8px;" +
@@ -364,7 +386,6 @@ public class Main extends Application {
         // +[GameBorderPane]+
         GameBorderPane.setBottom(GameOptionsHBox);
 
-
         // +[GameOptionsHBox]+
         GameOptionsHBox.setAlignment(Pos.TOP_CENTER);
         GameOptionsHBox.getChildren().addAll(GoBackwardButton, GoForwardButton);
@@ -372,7 +393,7 @@ public class Main extends Application {
 
         // +[GameStackPane]+
         GameStackPane.setStyle("-fx-background-color: black;"); //... <============== CREDITS TO CLAUDE FOR HELPING FIX SCENE FROM TURNING WHITE
-        GameStackPane.getChildren().addAll(GameBorderPane, GirlImageView);
+        GameStackPane.getChildren().addAll(GameBackgroundMediaView, GirlImageView, GameBorderPane);
 
         // +[STAGE]+
         stage.setScene(GameScene);
@@ -401,6 +422,9 @@ public class Main extends Application {
                 if (CantMove) {
                     // MAIN CHARACTER
                     GirlImageWalking[0].stop(); // stops the animation
+                    // GAME BACKGROUND
+                    LastGameBackgroundVideoPosition = GameBackgroundMediaPlayer.getCurrentTime(); // gets the current time position <========== THANKS TO CLAUDE FOR THE SYNTAX
+                    GameBackgroundMediaPlayer.stop();
 
                     System.out.println(" YOU CANT MOVE");
                 } else {
@@ -410,6 +434,14 @@ public class Main extends Application {
                         GoForwardButton.setStyle(onButton); // Changes Button Style
                         // MAIN CHARACTER <============================== THANKS TO CLAUDE
                         changeWalking(GirlImageWalking, ForwardGirlImage01);
+                        // GAME BACKGROUND
+                        LastGameBackgroundVideoPosition = GameBackgroundMediaPlayer.getCurrentTime(); // gets the current time position <========== THANKS TO CLAUDE FOR THE SYNTAX
+                        changeGameBackground(GameBackgroundNormalFilePath); // Changes to the background
+                        GameBackgroundMediaPlayer.setOnReady(() -> { // THIS IS TO PREVENT THE VIDEO FROM FAILING (IT TAKES TIME TO LOAD THE FILE)
+                            TotalGameBackgroundVideoTime = GameBackgroundMediaPlayer.getTotalDuration();
+                            GameBackgroundMediaPlayer.seek(changeLastPosition(LastGameBackgroundVideoPosition, TotalGameBackgroundVideoTime)); // Goes to where the last position was
+                            GameBackgroundMediaPlayer.play(); // plays
+                        });
 
                         MovingBackward = false;
                         GoBackwardButton.setStyle(offButton);
@@ -424,6 +456,14 @@ public class Main extends Application {
                         GoBackwardButton.setStyle(onButton);
                         // MAIN CHARACTER <============================== THANKS TO CLAUDE
                         changeWalking(GirlImageWalking, BackwardGirlImage01); // Timeline, Image
+                        // GAME BACKGROUND
+                        LastGameBackgroundVideoPosition = GameBackgroundMediaPlayer.getCurrentTime(); // gets the current time position <========== THANKS TO CLAUDE FOR THE SYNTAX
+                        changeGameBackground(GameBackgroundReverseFilePath); // Changes to the background
+                        GameBackgroundMediaPlayer.setOnReady(() -> { // THIS IS TO PREVENT THE VIDEO FROM FAILING (IT TAKES TIME TO LOAD THE FILE)
+                            TotalGameBackgroundVideoTime = GameBackgroundMediaPlayer.getTotalDuration();
+                            GameBackgroundMediaPlayer.seek(changeLastPosition(LastGameBackgroundVideoPosition, TotalGameBackgroundVideoTime)); // Goes to where the last position was
+                            GameBackgroundMediaPlayer.play(); // plays
+                        });
 
                         // play music something
                         // play video something
@@ -436,7 +476,6 @@ public class Main extends Application {
             } else {
                 System.out.println("FORWARD BUTTON IS ON COOLDOWN");
             }
-
         });
 
         // +[GO BACKWARD BUTTON]+
@@ -476,9 +515,30 @@ public class Main extends Application {
                 System.out.println("BACKWARD BUTTON IS ON COOLDOWN");
             }
         });
+        
+        GameBackgroundMediaPlayer.setOnEndOfMedia(() -> {
+            if (MovingForward) {
+                changeGameBackground(GameBackgroundNormalFilePath);
+                GameBackgroundMediaPlayer.play();
+            } else {
+                changeGameBackground(GameBackgroundReverseFilePath);
+                GameBackgroundMediaPlayer.play();
+            }
+        });
     }
 
     // ======== OTHER METHODS ========= \\
+
+    // +[VIDEOS]+
+    private void changeGameBackground(String filePath) {
+        GameBackgroundMediaPlayer.stop();
+        GameBackgroundMedia = new Media(filePath);
+        GameBackgroundMediaPlayer = new MediaPlayer(GameBackgroundMedia);
+        GameBackgroundMediaView.setMediaPlayer(GameBackgroundMediaPlayer);
+    }
+    private Duration changeLastPosition(Duration currentTime, Duration totalVideoTime) { //...  <============== CREDITS TO CLAUDE FOR HELPING ME SOLVE SIMPLE MATH
+        return totalVideoTime.subtract(currentTime);
+    }
 
     // +[ANIMATIONS]+
     private Timeline Walking(ImageView imgView) {
@@ -514,8 +574,10 @@ public class Main extends Application {
         GirlImageView.setTranslateX(0); // Resets X position (to reset the saved imageview position from the timeline)
         GirlImageView.setTranslateY(0); // Resets Y position (to reset the saved imageview position from the timeline)
         GirlImageView.setImage(img); // Changes the Image View
-        tmLine[0] = Walking(GirlImageView); // Changes the Timeline
+        tmLine[0] = Walking(GirlImageView); // Changes the Image of the Timeline
         tmLine[0].play(); // Plays
+
+        // ... <================================ THANKS CLAUDE FOR HELPING ME DEBUG THE GLITCHY ANIMATION WHEN THE BUTTON IS SPAM CLICKED MAKING NEW AND OLD ANIMATIONS TO OVERLAP
     }
 
     // +[TRANSITIONS]+
@@ -555,8 +617,6 @@ public class Main extends Application {
 // TODO: INITIALLY THINKING OF REPLACING THE GAME TITLE INTO AN IMAGE (BETTER TEXT VISUALS)
 // TODO: CREATE MORE VIDEO BACKGROUND FOR THE GAME MENU AND ADD EERIE BACKGROUND MUSIC
 // TODO: ADD COOLDOWN FOR BUTTONS IN THE MENU PS: ADD THE COOLDOWN FOR THE OTHER BACKWARD BUTTON IN THE GAME SCENE
+// TODO: SINCE WE HAVE BEEN OCCURRING SOME LOADING ISSUES WITH THE INTRODUCTION, WE SHOULD IMPLEMENT A SETONREADY LAMBDA EXPRESSION IN ORDER TO GIVE THE APPLICATION TIME TO LOAD AND SUCCESSFULLY PLAY SEAMLESSLY
 
-// streak
-
-//! TODO: SHORTER THE VIDEO BACKGROUND FOR THE GAME.
-//! TODO: FIX THE GIT PUSH ISSUE (SOME FILES ARE TOO LARGE FOR GITHUB)
+//! TODO: ADD THE GAME BACKGROUND MECHANICS TO THE BACKWARD(LEFT) BUTTON

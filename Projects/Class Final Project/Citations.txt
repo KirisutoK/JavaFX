@@ -39,11 +39,7 @@ Videos used in making the game menu:
 https://pixabay.com/videos/full-moon-night-spooky-woods-11721/
 
 <0>--------------------------------------------------------------------------------<0>
-...GEMINI [Main Character]...
-Link: https://gemini.google.com/share/d99787700e39
-Output: MainCharacter Folder
-Photo Editor App Used: https://pixlr.com/
 
 <0>--------------------------------------------------------------------------------<0>
 [GAME BACKGROUND]
-Link: https://youtu.be/buL6XI71TJM
+Normal Video Link: https://youtu.be/buL6XI71TJM -> REVERSED BY CAPCUT

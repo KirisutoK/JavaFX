@@ -1,5 +1,5 @@
 // Creation Date: April 30, 2026. at 11:53 AM
-// Last Modified: May 18, 2026. at 11:13 PM
+// Last Modified: May 19, 2026. at  2:11 AM
 
 /*
 THE MEDIAS FOR THIS FOLDER IS NOT PUBLISHED IN GITHUB DUE TO MEMORY LIMITATIONS.
@@ -46,12 +46,6 @@ public class Main extends Application {
     private static AudioClip clickAudio = new AudioClip(Main.class.getResource("Medias/Audios/Click.mp3").toExternalForm()); // ... <============== CREDITS TO PROFESSOR PAIGE FOR THE AUDIOCLIP & CLAUDE FOR DEBUGGING;
     private static AudioClip hoverAudio = new AudioClip(Main.class.getResource("Medias/Audios/Hover.mp3").toExternalForm()); // ... <============== CREDITS TO PROFESSOR PAIGE FOR THE AUDIOCLIP & CLAUDE FOR DEBUGGING;
 
-    // +[IMAGES]+
-    // . MainCharacter
-    private static Image ForwardGirlImage01 = new Image("Medias/Images/MainCharacter/Forward01.png"); // WalkingForward01 Image
-    private static Image BackwardGirlImage01 = new Image("Medias/Images/MainCharacter/Backward01.png"); // WalkingBackward01 Image
-    private static ImageView GirlImageView = new ImageView(ForwardGirlImage01); // the default is ForwardGirlImage01 (This object is so that we can view the image)
-
     // +[VIDEOS]+
     // . GameBackground
     private static String GameBackgroundNormalFilePath = Main.class.getResource("Medias/Videos/GameBackground.mp4").toExternalForm(); // FIRST TO PLAY AS THE BACKGROUND WHEN PLAYING THE GAME
@@ -77,10 +71,9 @@ public class Main extends Application {
         // ======== OBJECTS (LEAF NODES) ======== \\
 
         // +[INTRODUCTION]+
-        playIntroduction("Medias/Videos/HaloHaloStudios.mp4", "Medias/Videos/ContentWarning.mp4");
+        // playIntroduction("Medias/Videos/HaloHaloStudios.mp4", "Medias/Videos/ContentWarning.mp4");
 
-        //
-        // GameMenu();
+        GameMenu();
 
         // ======== STAGE>SCENE ======== \\
         stage.setScene(IntroductionScene); // FIRST SCENE TO PLAY
@@ -393,14 +386,10 @@ public class Main extends Application {
 
         // +[GameStackPane]+
         GameStackPane.setStyle("-fx-background-color: black;"); //... <============== CREDITS TO CLAUDE FOR HELPING FIX SCENE FROM TURNING WHITE
-        GameStackPane.getChildren().addAll(GameBackgroundMediaView, GirlImageView, GameBorderPane);
+        GameStackPane.getChildren().addAll(GameBackgroundMediaView, GameBorderPane);
 
         // +[STAGE]+
         stage.setScene(GameScene);
-
-        // +[ANIMATION]+
-        Timeline[] GirlImageWalking = {Walking(GirlImageView)}; // DEFAULT TIMELINE (THIS NEEDS TO BE IN AN ARRAY BECAUSE WE CANT CHANGE IN A LAMBDA
-        GirlImageWalking[0].play();
 
         // +[FADE TRANSITION]+
         FadeTransition GameTransition = fadeIn(GameStackPane);
@@ -420,8 +409,6 @@ public class Main extends Application {
         GoForwardButton.setOnMouseClicked(e -> {
             if (CanClick[0] == true) {
                 if (CantMove) {
-                    // MAIN CHARACTER
-                    GirlImageWalking[0].stop(); // stops the animation
                     // GAME BACKGROUND
                     LastGameBackgroundVideoPosition = GameBackgroundMediaPlayer.getCurrentTime(); // gets the current time position <========== THANKS TO CLAUDE FOR THE SYNTAX
                     GameBackgroundMediaPlayer.stop();
@@ -432,8 +419,6 @@ public class Main extends Application {
                     if (!MovingForward) { // if it is not moving forward
                         MovingForward = true;
                         GoForwardButton.setStyle(onButton); // Changes Button Style
-                        // MAIN CHARACTER <============================== THANKS TO CLAUDE
-                        changeWalking(GirlImageWalking, ForwardGirlImage01);
                         // GAME BACKGROUND <============================== THANKS TO CLAUDE
                         LastGameBackgroundVideoPosition = GameBackgroundMediaPlayer.getCurrentTime(); // gets the current time position <========== THANKS TO CLAUDE FOR THE SYNTAX
                         changeGameBackground(GameBackgroundNormalFilePath); // Changes to the background
@@ -454,8 +439,6 @@ public class Main extends Application {
 
                         MovingBackward = true;
                         GoBackwardButton.setStyle(onButton);
-                        // MAIN CHARACTER <============================== THANKS TO CLAUDE
-                        changeWalking(GirlImageWalking, BackwardGirlImage01); // Timeline, Image
                         // GAME BACKGROUND <============================== THANKS TO CLAUDE
                         LastGameBackgroundVideoPosition = GameBackgroundMediaPlayer.getCurrentTime(); // gets the current time position <========== THANKS TO CLAUDE FOR THE SYNTAX
                         changeGameBackground(GameBackgroundReverseFilePath); // Changes to the background
@@ -482,8 +465,6 @@ public class Main extends Application {
         GoBackwardButton.setOnMouseClicked(e -> {
             if (CanClick[0] == true) {
                 if (CantMove) {
-                    // MAIN CHARACTER
-                    GirlImageWalking[0].stop(); // stops the animation
 
                     System.out.println(" YOU CANT MOVE");
                 } else {
@@ -491,8 +472,6 @@ public class Main extends Application {
                     if (!MovingBackward) { // if it is not moving backward
                         MovingBackward = true;
                         GoBackwardButton.setStyle(onButton);
-                        // MAIN CHARACTER <============================== THANKS TO CLAUDE
-                        changeWalking(GirlImageWalking, BackwardGirlImage01); // Timeline, Image
                         // GAME BACKGROUND <============================== THANKS TO CLAUDE
                         LastGameBackgroundVideoPosition = GameBackgroundMediaPlayer.getCurrentTime(); // gets the current time position <========== THANKS TO CLAUDE FOR THE SYNTAX
                         changeGameBackground(GameBackgroundReverseFilePath); // Changes to the background
@@ -511,8 +490,6 @@ public class Main extends Application {
 
                         MovingForward = true;
                         GoForwardButton.setStyle(onButton);
-                        // MAIN CHARACTER <============================== THANKS TO CLAUDE
-                        changeWalking(GirlImageWalking, ForwardGirlImage01); // Timeline, Image
                     }
 
                     // +[COOLDOWN]+
@@ -549,44 +526,6 @@ public class Main extends Application {
     }
 
     // +[ANIMATIONS]+
-    private Timeline Walking(ImageView imgView) {
-        Timeline Walking = new Timeline(
-                new KeyFrame(
-                        Duration.seconds(0.5),
-                        new KeyValue(imgView.translateXProperty(), 10),
-                        new KeyValue(imgView.translateYProperty(), 10)
-                ),
-                new KeyFrame(
-                        Duration.seconds(1),
-                        new KeyValue(imgView.translateXProperty(), 0),
-                        new KeyValue(imgView.translateYProperty(), 0)
-                        ),
-                new KeyFrame(
-                        Duration.seconds(1.5),
-                        new KeyValue(imgView.translateXProperty(), -20),
-                        new KeyValue(imgView.translateYProperty(), 10)
-                ),
-                new KeyFrame(
-                        Duration.seconds(2),
-                        new KeyValue(imgView.translateXProperty(), 0),
-                        new KeyValue(imgView.translateYProperty(), 0)
-                )
-        );
-
-        Walking.setCycleCount(Walking. INDEFINITE);
-
-        return Walking;
-    };
-    private void changeWalking(Timeline[] tmLine, Image img) { // Animation, Image
-        tmLine[0].stop(); // Stops (to prevent animation from stacking together)
-        GirlImageView.setTranslateX(0); // Resets X position (to reset the saved imageview position from the timeline)
-        GirlImageView.setTranslateY(0); // Resets Y position (to reset the saved imageview position from the timeline)
-        GirlImageView.setImage(img); // Changes the Image View
-        tmLine[0] = Walking(GirlImageView); // Changes the Image of the Timeline
-        tmLine[0].play(); // Plays
-
-        // ... <================================ THANKS CLAUDE FOR HELPING ME DEBUG THE GLITCHY ANIMATION WHEN THE BUTTON IS SPAM CLICKED MAKING NEW AND OLD ANIMATIONS TO OVERLAP
-    }
 
     // +[TRANSITIONS]+
     private FadeTransition fadeOut(Node node) { // Node is what's inside the scene
@@ -625,6 +564,3 @@ public class Main extends Application {
 // TODO: INITIALLY THINKING OF REPLACING THE GAME TITLE INTO AN IMAGE (BETTER TEXT VISUALS)
 // TODO: CREATE MORE VIDEO BACKGROUND FOR THE GAME MENU AND ADD EERIE BACKGROUND MUSIC
 // TODO: ADD COOLDOWN FOR BUTTONS IN THE MENU PS: ADD THE COOLDOWN FOR THE OTHER BACKWARD BUTTON IN THE GAME SCENE
-// TODO: SINCE WE HAVE BEEN OCCURRING SOME LOADING ISSUES WITH THE INTRODUCTION, WE SHOULD IMPLEMENT A SETONREADY LAMBDA EXPRESSION IN ORDER TO GIVE THE APPLICATION TIME TO LOAD AND SUCCESSFULLY PLAY SEAMLESSLY
-
-//! TODO: ADD THE GAME BACKGROUND MECHANICS TO THE BACKWARD(LEFT) BUTTON

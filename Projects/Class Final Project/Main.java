@@ -1,5 +1,5 @@
 // Creation Date: April 30, 2026. at 11:53 AM
-// Last Modified: May 18, 2026. at  1:52 AM
+// Last Modified: May 18, 2026. at 11:13 PM
 
 /*
 THE MEDIAS FOR THIS FOLDER IS NOT PUBLISHED IN GITHUB DUE TO MEMORY LIMITATIONS.
@@ -77,9 +77,10 @@ public class Main extends Application {
         // ======== OBJECTS (LEAF NODES) ======== \\
 
         // +[INTRODUCTION]+
-        // playIntroduction("Medias/Videos/HaloHaloStudios.mp4", "Medias/Videos/ContentWarning.mp4");
+        playIntroduction("Medias/Videos/HaloHaloStudios.mp4", "Medias/Videos/ContentWarning.mp4");
 
-        GameMenu();
+        //
+        // GameMenu();
 
         // ======== STAGE>SCENE ======== \\
         stage.setScene(IntroductionScene); // FIRST SCENE TO PLAY
@@ -106,7 +107,6 @@ public class Main extends Application {
             FirstFileMediaView.setFitHeight(800);
 
             // PLAY FILE
-            System.out.println("Video played");
             FirstFileMediaPlayer.play();
 
             // ADDING IT TO THE LAYOUT
@@ -125,7 +125,7 @@ public class Main extends Application {
                 SecondFileMediaView.setFitWidth(1100);
                 SecondFileMediaView.setFitHeight(760);
 
-                // PLAY FILE
+                // PLAY FILE (WHEN IT'S READY)
                 SecondFileMediaPlayer.play();
 
                 // ADDING IT TO THE PANE
@@ -186,8 +186,8 @@ public class Main extends Application {
             GameMenuBackgroundMediaView.setFitHeight(800);
 
             // PLAY FILE
-            GameMenuBackgroundMediaPlayer.setAutoPlay(true);
             GameMenuBackgroundMediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+            GameMenuBackgroundMediaPlayer.setAutoPlay(true);
 
             // ADDING IT TO THE LAYOUT
             GameMenuOptionsVBox.getChildren().add(GameMenuBackgroundMediaView);
@@ -434,7 +434,7 @@ public class Main extends Application {
                         GoForwardButton.setStyle(onButton); // Changes Button Style
                         // MAIN CHARACTER <============================== THANKS TO CLAUDE
                         changeWalking(GirlImageWalking, ForwardGirlImage01);
-                        // GAME BACKGROUND
+                        // GAME BACKGROUND <============================== THANKS TO CLAUDE
                         LastGameBackgroundVideoPosition = GameBackgroundMediaPlayer.getCurrentTime(); // gets the current time position <========== THANKS TO CLAUDE FOR THE SYNTAX
                         changeGameBackground(GameBackgroundNormalFilePath); // Changes to the background
                         GameBackgroundMediaPlayer.setOnReady(() -> { // THIS IS TO PREVENT THE VIDEO FROM FAILING (IT TAKES TIME TO LOAD THE FILE)
@@ -456,7 +456,7 @@ public class Main extends Application {
                         GoBackwardButton.setStyle(onButton);
                         // MAIN CHARACTER <============================== THANKS TO CLAUDE
                         changeWalking(GirlImageWalking, BackwardGirlImage01); // Timeline, Image
-                        // GAME BACKGROUND
+                        // GAME BACKGROUND <============================== THANKS TO CLAUDE
                         LastGameBackgroundVideoPosition = GameBackgroundMediaPlayer.getCurrentTime(); // gets the current time position <========== THANKS TO CLAUDE FOR THE SYNTAX
                         changeGameBackground(GameBackgroundReverseFilePath); // Changes to the background
                         GameBackgroundMediaPlayer.setOnReady(() -> { // THIS IS TO PREVENT THE VIDEO FROM FAILING (IT TAKES TIME TO LOAD THE FILE)
@@ -493,6 +493,14 @@ public class Main extends Application {
                         GoBackwardButton.setStyle(onButton);
                         // MAIN CHARACTER <============================== THANKS TO CLAUDE
                         changeWalking(GirlImageWalking, BackwardGirlImage01); // Timeline, Image
+                        // GAME BACKGROUND <============================== THANKS TO CLAUDE
+                        LastGameBackgroundVideoPosition = GameBackgroundMediaPlayer.getCurrentTime(); // gets the current time position <========== THANKS TO CLAUDE FOR THE SYNTAX
+                        changeGameBackground(GameBackgroundReverseFilePath); // Changes to the background
+                        GameBackgroundMediaPlayer.setOnReady(() -> { // THIS IS TO PREVENT THE VIDEO FROM FAILING (IT TAKES TIME TO LOAD THE FILE)
+                            TotalGameBackgroundVideoTime = GameBackgroundMediaPlayer.getTotalDuration();
+                            GameBackgroundMediaPlayer.seek(changeLastPosition(LastGameBackgroundVideoPosition, TotalGameBackgroundVideoTime)); // Goes to where the last position was
+                            GameBackgroundMediaPlayer.play(); // plays
+                        });
 
                         MovingForward = false;
                         GoForwardButton.setStyle(offButton);
